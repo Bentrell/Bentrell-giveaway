@@ -1,36 +1,88 @@
-<!doctype html>
-<html>
+<!DOCTYPE html><html lang="en">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Bentrell Promo Giveaway</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <link rel="stylesheet" href="assets/app.css" />
+  <style>
+    body { margin:0; font-family: Arial, sans-serif; background:#f4f4f4; color:#222; }
+    header { background:#4C6EF5; color:white; padding:20px; text-align:center; }
+    h1 { margin:0; font-size:28px; }
+    .container { max-width:900px; margin:20px auto; background:white; padding:20px; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
+    .section-title { font-size:22px; margin-bottom:10px; color:#4C6EF5; }
+    .countdown { font-size:20px; font-weight:bold; background:#eef2ff; padding:10px; border-radius:8px; text-align:center; margin-bottom:20px; }
+    form label { display:block; margin-top:12px; font-weight:bold; }
+    form input, form textarea { width:100%; padding:10px; margin-top:6px; border:1px solid #ccc; border-radius:6px; }
+    button { background:#4C6EF5; color:white; border:none; padding:12px 20px; border-radius:6px; margin-top:15px; font-size:16px; cursor:pointer; }
+    button:hover { background:#3b5bd3; }
+    .whatsapp-share { display:block; text-align:center; margin-top:20px; }
+    .whatsapp-share a { background:#25D366; color:white; padding:12px 16px; border-radius:6px; text-decoration:none; font-weight:bold; }
+    .footer { text-align:center; color:#777; margin-top:30px; font-size:14px; padding-bottom:20px; }
+  </style>
 </head>
 <body>
-  <main class="container">
-    <h1 id="title">Bentrell Promo Giveaway</h1>
+  <header>
+    <h1>Bentrell Promo Giveaway</h1>
+    <p>Win ₦500,000 — Only for Opay accounts</p>
+  </header>  <div class="container"><div class="countdown" id="countdown">Loading giveaway countdown...</div>
 
-    <section id="rules">
-      <h2>Rules</h2>
-      <div id="metaRules">Loading giveaway details…</div>
-    </section>
+<h2 class="section-title">How To Enter</h2>
+<p>
+  1. Share this website link on your WhatsApp Status.<br>
+  2. Screenshot your status showing the link.<br>
+  3. Fill the form below and upload the screenshot.<br>
+  4. Giveaway runs from <b>21 Nov 2025</b> to <b>30 Jan 2026</b>.
+</p>
 
-    <section id="form">
-      <h2>Enter the giveaway</h2>
-      <form id="entryForm">
-        <label>Name <input name="name" required /></label><br/>
-        <label>Phone <input name="phone" required /></label><br/>
-        <label>Opay account number <input name="opayAccount" required /></label><br/>
-        <label>Upload screenshot of your WhatsApp status <input type="file" name="screenshot" accept="image/*" required /></label><br/>
-        <button type="submit">Submit Entry</button>
-      </form>
-      <div id="statusMsg"></div>
-    </section>
+<h2 class="section-title">Giveaway Entry Form</h2>
 
-    <section id="dates" style="margin-top:18px">
-      <strong>Giveaway period:</strong> <span id="period"></span>
-    </section>
-  </main>
-  <script src="assets/app.js"></script>
-</body>
+<!-- Using Formspree for submission -->
+<form action="https://formspree.io/f/movqqbnj" method="POST" enctype="multipart/form-data">
+  <label>Your Full Name</label>
+  <input type="text" name="fullname" required>
+
+  <label>Phone Number</label>
+  <input type="text" name="phone" required>
+
+  <label>Opay Account Number</label>
+  <input type="text" name="opay" required>
+
+  <label>Upload Screenshot of Your WhatsApp Status</label>
+  <input type="file" name="screenshot" accept="image/*" required>
+
+  <label>Additional Message (Optional)</label>
+  <textarea name="message" rows="4"></textarea>
+
+  <button type="submit">Submit Entry</button>
+</form>
+
+<div class="whatsapp-share">
+  <a href="https://wa.me/?text=Join%20the%20Bentrell%20Promo%20Giveaway!%20Win%20₦500,000!%20Click%20here:%20https://bentrell-giveaway.onrender.com" target="_blank">
+    Share on WhatsApp
+  </a>
+</div>
+
+  </div>  <div class="footer">© 2025 Bentrell Promo Giveaway — All Rights Reserved</div>  <script>
+    const endDate = new Date("2026-01-30T23:59:59").getTime();
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const diff = endDate - now;
+
+      if (diff <= 0) {
+        document.getElementById('countdown').innerHTML = "Giveaway Has Ended";
+        return;
+      }
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+      document.getElementById('countdown').innerHTML =
+        `Giveaway Ends In: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+    }
+
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+  </script></body>
 </html>
