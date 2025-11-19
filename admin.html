@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Admin Dashboard — Giveaway</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="assets/app.css" />
+</head>
+<body>
+  <main class="container">
+    <h1>Admin Dashboard</h1>
+    <p>Admin routes are protected by basic auth. Use your admin credentials to log in (browser will prompt).</p>
+    <div id="entries"></div>
+  </main>
+<script>
+async function loadEntries() {
+  const res = await fetch('/admin/entries');
+  if (!res.ok) {
+    document.getElementById('entries').innerText = 'Failed to load entries: ' + res.status;
+    return;
+  }
+  const list = await res.json();
+  const html = list.map(e => `
+    <div class="entry">
+      <strong>${e.name}</strong> — ${e.phone} — Opay: ${e.opayAccount} — ${new Date(e.submittedAt).toLocaleString()}
+      <div>
+        Verified: ${e.verified} Paid: ${e.paid}
+      </div>
+      <div>
+        <a href="/admin/uploads/${e.screenshotFilename}" target="_blank">View screenshot</a>
+      </div>
+      <div>
+        <button onclick="verify('${e._id}', true)">Mark Valid</button>
+        <button onclick="verify('${e._id}', false)">Mark Invalid</button>
+        <button onclick="payout('${e._id}')">Payout (simulate)</button>
+      </div>
+    </div>
+    `).join('<hr/>');
+  document.getElementById('entries').innerHTML = html || 'No entries yet';
+}
+
+async function verify(id, isValid) {
+  const body = { verified: isValid, invalidReason: isValid ? null : 'Manual invalidation' };
+  await fetch(`/admin/entries/${id}/verify`, {
+    method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(body)
+  });
+  await loadEntries();
+}
+
+async function payout(id) {
+  const amount = prompt('Payout amount (₦):', '500000');
+  if (!amount) return;
+  const res = await fetch(`/admin/entries/${id}/payout`, {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ amountNaira: amount })
+  });
+  const j = await res.json();
+  alert(JSON.stringify(j));
+  await loadEntries();
+}
+
+loadEntries();
+</script>
+</body>
+</html>
